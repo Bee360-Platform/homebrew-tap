@@ -2,13 +2,16 @@
 <!-- What is changed and why? -->
 
 ## References
+<!-- Public repository: reference internal tickets and approvals by key only (e.g. TWE-523).
+     No internal URLs, hostnames, chat/channel names or personal data. -->
 - Ticket / issue:
-- Approval (if required, e.g. repository request thread):
+- Approval (if required, e.g. repository request):
 
 ## Security checklist (author)
-Requirements: [Code-Change Integration Guidelines](https://clausmark.atlassian.net/wiki/spaces/CINO/pages/5359534097/Code-Change+Integration+Guidelines) · [APP - Github](https://clausmark.atlassian.net/wiki/spaces/CINO/pages/6417743873/APP+-+Github) · Policies in Vanta: *Security in Projects, Development and Testing*, *Identity and Access Control*
+Requirements: *Code-Change Integration Guidelines* and *APP - Github* (internal Confluence) · Policies in Vanta: *Security in Projects, Development and Testing*, *Identity and Access Control*
 
 - [ ] No secrets, passwords, API keys or tokens in the change
+- [ ] No internal URLs, hostnames or personal data in code, commits or this description
 - [ ] No security measures bypassed or weakened (branch protection, permissions, signing, scans)
 - [ ] New third-party components (GitHub Actions, tools, libraries) come from trusted sources, are pinned (commit SHA / fixed version) and approved
 - [ ] Workflows use least privilege (`permissions:` set explicitly, secrets only where needed)
