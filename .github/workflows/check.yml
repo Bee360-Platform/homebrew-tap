@@ -1,0 +1,62 @@
+name: Cask checks
+
+# Required status checks for the Homebrew tap. Runs on every PR and on every push to main
+# (including the automated cask updates by the GitHub App, which bypass the PR requirement).
+# - cask-security: URL allowlist, no code-executing stanzas, SHA256 matches the release asset
+# - brew: brew style + brew audit --cask
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cask-security:
+    name: cask-security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: URL allowlist, forbidden stanzas, SHA256 vs. release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/check-casks.sh
+
+  brew:
+    name: brew style + audit
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_ANALYTICS: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Register checkout as tap
+        run: |
+          set -euo pipefail
+          tapdir="$(brew --repository)/Library/Taps/bee360-platform/homebrew-tap"
+          mkdir -p "$(dirname "$tapdir")"
+          ln -s "$GITHUB_WORKSPACE" "$tapdir"
+          # Homebrew 6 tap trust – only on this ephemeral CI runner, for our own tap
+          brew trust bee360-platform/tap
+
+      - name: brew style
+        run: brew style bee360-platform/tap
+
+      - name: brew audit
+        run: brew audit --cask --strict --online --tap=bee360-platform/tap
