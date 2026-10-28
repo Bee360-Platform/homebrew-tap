@@ -3,7 +3,7 @@ name: Cask checks
 # Required status checks for the Homebrew tap. Runs on every PR and on every push to main
 # (including the automated cask updates by the GitHub App, which bypass the PR requirement).
 # - cask-security: URL allowlist, no code-executing stanzas, SHA256 matches the release asset
-# - brew: brew style + brew audit --cask
+# - brew: brew style + brew audit --cask (tap set up by the official Homebrew action)
 
 on:
   pull_request:
@@ -42,21 +42,21 @@ jobs:
       HOMEBREW_NO_ANALYTICS: "1"
       HOMEBREW_NO_INSTALL_CLEANUP: "1"
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
+      # Official Homebrew action: sets up Homebrew and taps this repository (PR ref) itself
+      - id: setup
+        uses: Homebrew/actions/setup-homebrew@4790763c0a3ba4036f72634dc079c4a7dfcd4878 # 2026.10.19.1
 
-      - name: Register checkout as tap
-        run: |
-          set -euo pipefail
-          tapdir="$(brew --repository)/Library/Taps/bee360-platform/homebrew-tap"
-          mkdir -p "$(dirname "$tapdir")"
-          ln -s "$GITHUB_WORKSPACE" "$tapdir"
-          # Homebrew 6 tap trust – only on this ephemeral CI runner, for our own tap
-          brew trust bee360-platform/tap
+      - name: Trust this tap (Homebrew 6, ephemeral CI runner only)
+        env:
+          TAP: ${{ steps.setup.outputs.tap-name }}
+        run: brew trust "$TAP"
 
       - name: brew style
-        run: brew style bee360-platform/tap
+        env:
+          TAP: ${{ steps.setup.outputs.tap-name }}
+        run: brew style "$TAP"
 
       - name: brew audit
-        run: brew audit --cask --strict --online --tap=bee360-platform/tap
+        env:
+          TAP: ${{ steps.setup.outputs.tap-name }}
+        run: brew audit --cask --strict --online --tap="$TAP"
