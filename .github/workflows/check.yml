@@ -1,0 +1,62 @@
+name: Cask checks
+
+# Required status checks for the Homebrew tap. Runs on every PR and on every push to main
+# (including the automated cask updates by the GitHub App, which bypass the PR requirement).
+# - cask-security: URL allowlist, no code-executing stanzas, SHA256 matches the release asset
+# - brew: brew style + brew audit --cask (tap set up by the official Homebrew action)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cask-security:
+    name: cask-security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: URL allowlist, forbidden stanzas, SHA256 vs. release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/check-casks.sh
+
+  brew:
+    name: brew style + audit
+    runs-on: macos-latest
+    permissions:
+      contents: read
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_ANALYTICS: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+    steps:
+      # Official Homebrew action: sets up Homebrew and taps this repository (PR ref) itself
+      - id: setup
+        uses: Homebrew/actions/setup-homebrew@4790763c0a3ba4036f72634dc079c4a7dfcd4878 # 2026.10.19.1
+
+      - name: Trust this tap (Homebrew 6, ephemeral CI runner only)
+        env:
+          TAP: ${{ steps.setup.outputs.tap-name }}
+        run: brew trust "$TAP"
+
+      - name: brew style
+        env:
+          TAP: ${{ steps.setup.outputs.tap-name }}
+        run: brew style "$TAP"
+
+      - name: brew audit
+        env:
+          TAP: ${{ steps.setup.outputs.tap-name }}
+        run: brew audit --cask --strict --tap="$TAP"
