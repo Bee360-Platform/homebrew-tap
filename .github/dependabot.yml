@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    # New versions are only proposed after 7 days, so compromised
+    # releases are usually detected and withdrawn before we update.
+    cooldown:
+      default-days: 7
