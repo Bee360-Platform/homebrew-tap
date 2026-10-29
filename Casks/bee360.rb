@@ -13,6 +13,7 @@ cask "bee360" do
   end
 
   conflicts_with cask: "bee360@preview"
+  depends_on :macos
 
   app "Bee360.app"
 end
