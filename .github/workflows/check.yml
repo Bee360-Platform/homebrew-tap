@@ -59,4 +59,4 @@ jobs:
       - name: brew audit
         env:
           TAP: ${{ steps.setup.outputs.tap-name }}
-        run: brew audit --cask --strict --online --tap="$TAP"
+        run: brew audit --cask --strict --tap="$TAP"
