@@ -8,7 +8,7 @@ cask "bee360@preview" do
   homepage "https://www.bee360.com/"
 
   conflicts_with cask: "bee360"
-  depends_on :macos
+  depends_on macos: ">= :monterey"
 
   app "Bee360.app"
 end
