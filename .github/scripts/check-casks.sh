@@ -6,7 +6,7 @@
 set -euo pipefail
 
 REPO="Bee360-Platform/bee360-app"
-URL_RE='^  url "https://github\.com/Bee360-Platform/bee360-app/releases/download/v#\{version\}/Bee360-app_#\{version\}\.dmg"$'
+URL_RE='^[[:space:]]+url[[:space:]]+"https://github\.com/Bee360-Platform/bee360-app/releases/download/v#\{version\}/Bee360-app_#\{version\}\.dmg"$'
 FORBIDDEN_RE='^[[:space:]]*(preflight|postflight|uninstall_preflight|uninstall_postflight|installer|pkg|script|system_command|caveats)\b|`|%x[\(\{\[]|\b(system|exec|spawn|IO\.popen|Kernel\.)\b'
 
 fail=0
