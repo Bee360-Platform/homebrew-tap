@@ -17,3 +17,11 @@ brew install --cask bee360-platform/tap/bee360@preview    # Preview
 
 Casks are updated automatically on every release of
 https://github.com/Bee360-Platform/bee360-app.
+
+## Support
+
+Issues are disabled in this repository. For questions or problems with the app or the installation, please contact Bee360 support as described in the Support Guide: https://www.bee360.com/legal-documents
+
+## Security
+
+Please report vulnerabilities privately – see [SECURITY.md](SECURITY.md).
