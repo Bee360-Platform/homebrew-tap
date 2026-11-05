@@ -1,6 +1,6 @@
 cask "bee360" do
-  version "2.9.3"
-  sha256 "f864d5cf59d06ab267cff6423f64c04214b0962023591e1082dc2a7dc002674a"
+  version "2.11.5"
+  sha256 "48a56e2d23d168dc77a119cc2105a1457293d1acc42312c5051978a7fe52e09e"
 
   url "https://github.com/Bee360-Platform/bee360-app/releases/download/v#{version}/Bee360-app_#{version}.dmg"
   name "bee360"
