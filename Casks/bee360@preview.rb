@@ -1,6 +1,6 @@
 cask "bee360@preview" do
-  version "2.11.5"
-  sha256 "48a56e2d23d168dc77a119cc2105a1457293d1acc42312c5051978a7fe52e09e"
+  version "2.11.6"
+  sha256 "4775a7fdc7fa51b8a75e925e73ebd555077bdd2d16ead8be9fdff4bd719e4138"
 
   url "https://github.com/Bee360-Platform/bee360-app/releases/download/v#{version}/Bee360-app_#{version}.dmg"
   name "bee360 Preview"
