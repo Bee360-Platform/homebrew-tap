@@ -44,7 +44,7 @@ jobs:
     steps:
       # Official Homebrew action: sets up Homebrew and taps this repository (PR ref) itself
       - id: setup
-        uses: Homebrew/actions/setup-homebrew@d482da0e602890d3160aade42e72c8556103bf04 # 2026.10.26.1
+        uses: Homebrew/actions/setup-homebrew@c262868c096d909fc278daa87ed9772967331ea3 # 2026.11.02.1
 
       - name: Trust this tap (Homebrew 6, ephemeral CI runner only)
         env:
